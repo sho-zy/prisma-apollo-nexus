@@ -1,32 +1,50 @@
-import { idArg, stringArg } from 'nexus'
-import { prismaObjectType } from 'nexus-prisma'
+import { stringArg, idArg, mutationType } from 'nexus'
+import { hash, compare } from 'bcrypt'
+import { getUserId, APP_SECRET } from '../utils'
+import { sign } from 'jsonwebtoken'
 
-// @ts-ignore: Expression produces a union type that is too complex to represent.ts(2590)
-export const Mutation = prismaObjectType({
-  name: 'Mutation',
+export const Mutation = mutationType({
   definition(t) {
-    t.field('signupUser', {
-      type: 'User',
+    t.field('signup', {
+      type: 'AuthPayload',
       args: {
         name: stringArg({ nullable: true }),
         email: stringArg(),
+        password: stringArg(),
       },
-      resolve: (parent, { name, email }, ctx) => {
-        return ctx.prisma.createUser({
+      resolve: async (parent, { name, email, password }, ctx) => {
+        const hashedPassword = await hash(password, 10)
+        const user = await ctx.prisma.createUser({
           name,
           email,
+          password: hashedPassword,
         })
+        return {
+          token: sign({ userId: user.id }, APP_SECRET),
+          user,
+        }
       },
     })
-    t.field('deleteUser', {
-      type: 'User',
+
+    t.field('login', {
+      type: 'AuthPayload',
       args: {
-        id: stringArg({ nullable: false })
+        email: stringArg(),
+        password: stringArg(),
       },
-      resolve: (parent, { id }, ctx) => {
-        return ctx.prisma.deleteUser({
-          id
-        })
+      resolve: async (parent, { email, password }, context) => {
+        const user = await context.prisma.user({ email })
+        if (!user) {
+          throw new Error(`No user found for email: ${email}`)
+        }
+        const passwordValid = await compare(password, user.password)
+        if (!passwordValid) {
+          throw new Error('Invalid password')
+        }
+        return {
+          token: sign({ userId: user.id }, APP_SECRET),
+          user,
+        }
       },
     })
 
@@ -35,15 +53,13 @@ export const Mutation = prismaObjectType({
       args: {
         title: stringArg(),
         content: stringArg({ nullable: true }),
-        authorEmail: stringArg(),
       },
-      resolve: (parent, { title, content, authorEmail }, ctx) => {
+      resolve: (parent, { title, content }, ctx) => {
+        const userId = getUserId(ctx)
         return ctx.prisma.createPost({
           title,
           content,
-          author: {
-            connect: { email: authorEmail },
-          },
+          author: { connect: { id: userId } },
         })
       },
     })
@@ -51,9 +67,7 @@ export const Mutation = prismaObjectType({
     t.field('deletePost', {
       type: 'Post',
       nullable: true,
-      args: {
-        id: idArg(),
-      },
+      args: { id: idArg() },
       resolve: (parent, { id }, ctx) => {
         return ctx.prisma.deletePost({ id })
       },
@@ -62,9 +76,7 @@ export const Mutation = prismaObjectType({
     t.field('publish', {
       type: 'Post',
       nullable: true,
-      args: {
-        id: idArg(),
-      },
+      args: { id: idArg() },
       resolve: (parent, { id }, ctx) => {
         return ctx.prisma.updatePost({
           where: { id },

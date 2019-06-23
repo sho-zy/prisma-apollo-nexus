@@ -236,12 +236,14 @@ type UserObject =
   | { name: 'id', args?: [] | false, alias?: string  } 
   | { name: 'email', args?: [] | false, alias?: string  } 
   | { name: 'name', args?: [] | false, alias?: string  } 
+  | { name: 'password', args?: [] | false, alias?: string  } 
   | { name: 'posts', args?: UserPostsArgs[] | false, alias?: string  } 
 
 type UserFields =
   | 'id'
   | 'email'
   | 'name'
+  | 'password'
   | 'posts'
 
 
@@ -273,6 +275,14 @@ export interface UserFieldDetails {
     resolve: undefined
   }
   name: {
+    type: 'String'
+    args: {}
+    description: string
+    list: undefined
+    nullable: true
+    resolve: undefined
+  }
+  password: {
     type: 'String'
     args: {}
     description: string
@@ -1067,11 +1077,13 @@ type UserPreviousValuesObject =
   | { name: 'id', args?: [] | false, alias?: string  } 
   | { name: 'email', args?: [] | false, alias?: string  } 
   | { name: 'name', args?: [] | false, alias?: string  } 
+  | { name: 'password', args?: [] | false, alias?: string  } 
 
 type UserPreviousValuesFields =
   | 'id'
   | 'email'
   | 'name'
+  | 'password'
 
 
 
@@ -1095,6 +1107,14 @@ export interface UserPreviousValuesFieldDetails {
     resolve: undefined
   }
   name: {
+    type: 'String'
+    args: {}
+    description: string
+    list: undefined
+    nullable: true
+    resolve: undefined
+  }
+  password: {
     type: 'String'
     args: {}
     description: string
@@ -1436,6 +1456,20 @@ export interface UserWhereInput {
   name_not_starts_with?: string | null
   name_ends_with?: string | null
   name_not_ends_with?: string | null
+  password?: string | null
+  password_not?: string | null
+  password_in?: string[]
+  password_not_in?: string[]
+  password_lt?: string | null
+  password_lte?: string | null
+  password_gt?: string | null
+  password_gte?: string | null
+  password_contains?: string | null
+  password_not_contains?: string | null
+  password_starts_with?: string | null
+  password_not_starts_with?: string | null
+  password_ends_with?: string | null
+  password_not_ends_with?: string | null
   posts_every?: PostWhereInput | null
   posts_some?: PostWhereInput | null
   posts_none?: PostWhereInput | null
@@ -1487,6 +1521,20 @@ export type UserWhereInputInputObject =
   | { name: 'name_not_starts_with', alias?: string  } 
   | { name: 'name_ends_with', alias?: string  } 
   | { name: 'name_not_ends_with', alias?: string  } 
+  | { name: 'password', alias?: string  } 
+  | { name: 'password_not', alias?: string  } 
+  | { name: 'password_in', alias?: string  } 
+  | { name: 'password_not_in', alias?: string  } 
+  | { name: 'password_lt', alias?: string  } 
+  | { name: 'password_lte', alias?: string  } 
+  | { name: 'password_gt', alias?: string  } 
+  | { name: 'password_gte', alias?: string  } 
+  | { name: 'password_contains', alias?: string  } 
+  | { name: 'password_not_contains', alias?: string  } 
+  | { name: 'password_starts_with', alias?: string  } 
+  | { name: 'password_not_starts_with', alias?: string  } 
+  | { name: 'password_ends_with', alias?: string  } 
+  | { name: 'password_not_ends_with', alias?: string  } 
   | { name: 'posts_every', alias?: string  } 
   | { name: 'posts_some', alias?: string  } 
   | { name: 'posts_none', alias?: string  } 
@@ -1505,6 +1553,7 @@ export interface UserCreateInput {
   id?: string | null
   email?: string
   name?: string | null
+  password?: string | null
   posts?: PostCreateManyWithoutAuthorInput | null
 }
 export type UserCreateInputInputObject =
@@ -1512,6 +1561,7 @@ export type UserCreateInputInputObject =
   | { name: 'id', alias?: string  } 
   | { name: 'email', alias?: string  } 
   | { name: 'name', alias?: string  } 
+  | { name: 'password', alias?: string  } 
   | { name: 'posts', alias?: string  } 
   
 export interface PostCreateManyWithoutAuthorInput {
@@ -1539,12 +1589,14 @@ export type PostCreateWithoutAuthorInputInputObject =
 export interface UserUpdateInput {
   email?: string | null
   name?: string | null
+  password?: string | null
   posts?: PostUpdateManyWithoutAuthorInput | null
 }
 export type UserUpdateInputInputObject =
   | Extract<keyof UserUpdateInput, string>
   | { name: 'email', alias?: string  } 
   | { name: 'name', alias?: string  } 
+  | { name: 'password', alias?: string  } 
   | { name: 'posts', alias?: string  } 
   
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1755,11 +1807,13 @@ export type PostUpdateManyDataInputInputObject =
 export interface UserUpdateManyMutationInput {
   email?: string | null
   name?: string | null
+  password?: string | null
 }
 export type UserUpdateManyMutationInputInputObject =
   | Extract<keyof UserUpdateManyMutationInput, string>
   | { name: 'email', alias?: string  } 
   | { name: 'name', alias?: string  } 
+  | { name: 'password', alias?: string  } 
   
 export interface PostCreateInput {
   id?: string | null
@@ -1789,12 +1843,14 @@ export interface UserCreateWithoutPostsInput {
   id?: string | null
   email?: string
   name?: string | null
+  password?: string | null
 }
 export type UserCreateWithoutPostsInputInputObject =
   | Extract<keyof UserCreateWithoutPostsInput, string>
   | { name: 'id', alias?: string  } 
   | { name: 'email', alias?: string  } 
   | { name: 'name', alias?: string  } 
+  | { name: 'password', alias?: string  } 
   
 export interface PostUpdateInput {
   published?: boolean | null
@@ -1825,11 +1881,13 @@ export type UserUpdateOneRequiredWithoutPostsInputInputObject =
 export interface UserUpdateWithoutPostsDataInput {
   email?: string | null
   name?: string | null
+  password?: string | null
 }
 export type UserUpdateWithoutPostsDataInputInputObject =
   | Extract<keyof UserUpdateWithoutPostsDataInput, string>
   | { name: 'email', alias?: string  } 
   | { name: 'name', alias?: string  } 
+  | { name: 'password', alias?: string  } 
   
 export interface UserUpsertWithoutPostsInput {
   update?: UserUpdateWithoutPostsDataInput
@@ -1915,6 +1973,8 @@ export type UserOrderByInputValues =
   | 'email_DESC'
   | 'name_ASC'
   | 'name_DESC'
+  | 'password_ASC'
+  | 'password_DESC'
   | 'createdAt_ASC'
   | 'createdAt_DESC'
   | 'updatedAt_ASC'

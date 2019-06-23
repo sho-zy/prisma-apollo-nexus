@@ -1,12 +1,15 @@
-import { idArg, stringArg } from 'nexus'
-import { prismaObjectType } from 'nexus-prisma'
+import { getUserId } from "../utils";
+import { idArg, stringArg, queryType } from 'nexus'
 
-// @ts-ignore: Expression produces a union type that is too complex to represent.ts(2590)
-export const Query = prismaObjectType({
-  name: `Query`,
+export const Query = queryType({
   definition(t) {
-    t.prismaFields(['posts'])
-    t.prismaFields(['users'])
+    t.field('me', {
+      type: 'User',
+      resolve: (parent, args, ctx) => {
+        const userId = getUserId(ctx)
+        return ctx.prisma.user({ id: userId })
+      },
+    })
     t.list.field('feed', {
       type: 'Post',
       resolve: (parent, args, ctx) => ctx.prisma.posts({

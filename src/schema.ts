@@ -1,4 +1,4 @@
-import { makePrismaSchema, prismaObjectType } from 'nexus-prisma'
+import { makePrismaSchema } from 'nexus-prisma'
 import * as path from 'path'
 import datamodelInfo from './generated/nexus-prisma'
 import { prisma } from './generated/prisma-client'

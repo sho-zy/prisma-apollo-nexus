@@ -2,6 +2,7 @@ type User {
   id: ID! @id
   email: String! @unique
   name: String
+  password: String
   posts: [Post!]!
 }
 
