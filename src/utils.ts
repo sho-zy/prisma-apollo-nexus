@@ -1,7 +1,7 @@
 import { verify } from 'jsonwebtoken'
 import { Context } from './context'
 
-export const APP_SECRET = 'appsecret321'
+export const APP_SECRET = process.env.APP_SECRET!
 
 interface Token {
   userId: string
