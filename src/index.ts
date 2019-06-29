@@ -4,7 +4,13 @@ import { schema } from './schema'
 
 const server = new ApolloServer({
   schema,
-  context: { prisma },
+  context: ({ req }) => {
+    const authorization = req.headers.authorization || ''
+    return {
+      prisma,
+      authorization,
+    }
+  },
 })
 
 server.listen({ port: process.env.APOLLO_ENDPOINT_PORT! }, () =>
