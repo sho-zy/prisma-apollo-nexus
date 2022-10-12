@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/sho-zy/prisma-apollo-nexus#readme",
   "dependencies": {
-    "apollo-server": "2.6.3",
+    "apollo-server": "2.25.4",
     "bcrypt": "3.0.6",
     "dotenv": "8.0.0",
     "graphql": "14.3.1",
